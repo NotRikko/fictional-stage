@@ -2,6 +2,19 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import characterRoutes from "./routes/characterRoutes";
+import { execSync } from "child_process";
+
+if (process.env.NODE_ENV === "development") {
+  console.log("🟢 Resetting and seeding database for development...");
+  try {
+    execSync("npx prisma db push --force-reset --skip-generate && npx prisma db seed", {
+      stdio: "inherit",
+    });
+  } catch (err) {
+    console.error("❌ Failed to seed database:", err);
+    process.exit(1);
+  }
+}
 
 dotenv.config();
 const app = express();

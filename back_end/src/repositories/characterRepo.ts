@@ -1,31 +1,31 @@
 import { prisma } from '../db';
 
 interface CreateCharacterInput {
-    name: string;
-    imageUrl: string;
-    description?: string;
-    series?: string;
+    name: string;         
+    imageUrl: string;     
+    biography: string;    
+    series: string;       
+    roundId?: number;     
     songs?: { title: string }[];
   }
 
-  export const createCharacter = async (data: CreateCharacterInput) => {
-    return prisma.character.create({
-      data: {
-        name: data.name,
-        imageUrl: data.imageUrl,
-        description: data.description,
-        series: data.series,
-        songs: data.songs
-          ? {
-              create: data.songs, 
-            }
-          : undefined,
-      },
-      include: {
-        songs: true, 
-      },
-    });
-  };
+export const createCharacter = async (data: CreateCharacterInput) => {
+  return prisma.character.create({
+    data: {
+      name: data.name,
+      imageUrl: data.imageUrl,
+      biography: data.biography,
+      series: data.series,
+      ...(data.roundId && { roundId: data.roundId }),
+      ...(data.songs && { songs: { create: data.songs } }),
+    },
+    include: {
+      songs: true,
+      currentRound: true,
+      votes: true,
+    },
+  });
+};
 
 export const getCharacters = async () => {
   return prisma.character.findMany();

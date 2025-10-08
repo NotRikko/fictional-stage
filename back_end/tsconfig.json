@@ -5,7 +5,7 @@
     "module": "CommonJS",
 
     // Root and output directories
-    "rootDir": "src",
+    "rootDir": ".",
     "outDir": "dist",
 
     // Type checking
@@ -26,6 +26,6 @@
     // Node environment
     "types": ["node"]
   },
-  "include": ["src", "tsconfig.json"],
+  "include": ["src", "tsconfig.json", "prisma/seed.ts"],
   "exclude": ["node_modules", "dist"]
 }

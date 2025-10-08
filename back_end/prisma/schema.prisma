@@ -6,12 +6,11 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("FICTION_DATABASE_URL")
 }
 
 model Character {
@@ -21,8 +20,8 @@ model Character {
   biography String?  
   series    String?  
   songs     Song[]    
-  currentRound Round @relation(fields: [roundId], references: [id])
-  roundId Int
+  currentRound Round? @relation(fields: [roundId], references: [id])
+  roundId Int?
   votes Vote[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -38,7 +37,11 @@ model Song {
 
 model Round{
   id  Int @id @default(autoincrement())
+  name String
+  description String
   contestants Character[]
+  startDate DateTime
+  endDate DateTime
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
