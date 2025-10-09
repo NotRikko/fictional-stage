@@ -1,71 +1,47 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response } from "express";
 import * as roundRepo from "../repositories/roundRepo";
+import { asyncHandler } from "../utils/asyncHandler";
 
-export const getAllRounds = async (_req: Request, res: Response, next: NextFunction) => {
-  try {
-    const rounds = await roundRepo.getAllRounds();
-    res.status(200).json(rounds);
-  } catch (err) {
-    next(err); 
+export const getAllRounds = asyncHandler(async (_req: Request, res: Response) => {
+  const rounds = await roundRepo.getAllRounds();
+  res.status(200).json(rounds);
+});
+
+export const getRoundById = asyncHandler(async (req: Request, res: Response) => {
+  const id = Number(req.params.id);
+  const round = await roundRepo.getRoundById(id);
+
+  if (!round) {
+    res.status(404).json({ message: "Round not found." });
+    return;
   }
-};
 
-export const getRoundById = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const id = Number(req.params.id);
-    const round = await roundRepo.getRoundById(id);
+  res.status(200).json(round);
+});
 
-    if (!round) {
-      return res.status(404).json({ message: "Round not found." });
-    }
+export const createRound = asyncHandler(async (req: Request, res: Response) => {
+  const data = req.body;
+  const newRound = await roundRepo.createRound(data);
+  res.status(201).json(newRound);
+});
 
-    res.status(200).json(round);
-  } catch (err) {
-    next(err);
-  }
-};
+export const createRounds = asyncHandler(async (req: Request, res: Response) => {
+  const data = req.body;
 
-export const createRound = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const data = req.body;
-    const newround = await roundRepo.createRound(data);
-    res.status(201).json(newround);
-  } catch (err) {
-    next(err);
-  }
-};
+  const result = Array.isArray(data)
+    ? await Promise.all(data.map(d => roundRepo.createRound(d)))
+    : await roundRepo.createRound(data);
 
-export const createRounds = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const data = req.body;
-    let result;
-    if (Array.isArray(data)) {
-      result = await Promise.all(data.map(d => roundRepo.createRound(d)));
-    } else {
-      result = await roundRepo.createRound(data);
-    }
+  res.status(201).json(result);
+});
 
-    res.status(201).json(result);
-  } catch (err) {
-    next(err);
-  }
-};
+export const deleteRoundById = asyncHandler(async (req: Request, res: Response) => {
+  const id = Number(req.params.id);
+  await roundRepo.deleteRoundById(id);
+  res.status(200).json({ message: "Round deleted successfully." });
+});
 
-export const deleteRoundById = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const id = Number(req.params.id);
-    await roundRepo.deleteRoundById(id);
-    res.status(200).json({ message: "Round deleted successfully." });
-  } catch (err) {
-    next(err);
-  }
-};
-
-export const deleteAllRounds = async (_req: Request, res: Response, next: NextFunction) => {
-  try {
-    await roundRepo.deleteAllRounds();
-    res.status(200).json({ message: "All rounds deleted successfully."});
-  } catch (err) {
-    next(err); 
-  }
-};
+export const deleteAllRounds = asyncHandler(async (_req: Request, res: Response) => {
+  await roundRepo.deleteAllRounds();
+  res.status(200).json({ message: "All rounds deleted successfully." });
+});
