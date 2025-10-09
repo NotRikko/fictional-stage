@@ -2,7 +2,11 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import characterRoutes from "./routes/characterRoutes";
+import songRoutes from "./routes/songRoutes";
+import roundRoutes from "./routes/roundRoutes";
 import { execSync } from "child_process";
+import { errorHandler } from "./middleware/errorHandler";
+
 
 if (process.env.NODE_ENV === "development") {
   console.log("🟢 Resetting and seeding database for development...");
@@ -24,7 +28,11 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/characters", characterRoutes);
+app.use("/songs", songRoutes);
+app.use("/rounds", roundRoutes);
 
-app.get("/", (req, res) => res.send("Fictional Stage Backend is running 🚀"));
+app.use(errorHandler);
+
+app.get("/", (_req, res) => res.send("Fictional Stage Backend is running 🚀"));
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

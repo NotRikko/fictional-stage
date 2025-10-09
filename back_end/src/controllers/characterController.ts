@@ -50,6 +50,7 @@ export const createCharacters = async (req: Request, res: Response, next: NextFu
     next(err);
   }
 };
+
 export const deleteCharacterById = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = Number(req.params.id);

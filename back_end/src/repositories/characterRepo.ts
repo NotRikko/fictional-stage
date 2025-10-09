@@ -40,7 +40,7 @@ export const getCharacterById = async (id: number) => {
 export const deleteCharacterById = async (id: number) => {
   return prisma.character.delete({
     where: {id},
-  })
+  });
 }
 
 export const deleteAllCharacters = async () => {
