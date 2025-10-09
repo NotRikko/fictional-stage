@@ -23,7 +23,7 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/characters", characterRoutes);
+app.use("/characters", characterRoutes);
 
 app.get("/", (req, res) => res.send("Fictional Stage Backend is running 🚀"));
 

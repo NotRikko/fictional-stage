@@ -27,7 +27,7 @@ export const createCharacter = async (data: CreateCharacterInput) => {
   });
 };
 
-export const getCharacters = async () => {
+export const getAllCharacters = async () => {
   return prisma.character.findMany();
 };
 
@@ -36,3 +36,13 @@ export const getCharacterById = async (id: number) => {
     where: { id },
   });
 };
+
+export const deleteCharacterById = async (id: number) => {
+  return prisma.character.delete({
+    where: {id},
+  })
+}
+
+export const deleteAllCharacters = async () => {
+  return prisma.character.deleteMany();
+}
