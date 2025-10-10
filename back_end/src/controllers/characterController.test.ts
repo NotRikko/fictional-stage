@@ -132,7 +132,7 @@ describe("characterController", () => {
     expect(mockRes.json).toHaveBeenCalledWith([created1, created2]);
   });
 
-  it("should delete a character and return success message", async () => {
+  it("should delete a character and return 200 w/success message", async () => {
     mockReq.params = { id: "1" };
     (characterRepo.deleteCharacterById as any).mockResolvedValue(createFakeCharacter());
 
