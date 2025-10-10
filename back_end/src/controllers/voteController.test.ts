@@ -19,6 +19,7 @@ vi.mock("../repositories/voteRepo", () => ({
 
 const createFakeVote = (overrides = {}) => ({
   id: 1,
+  userId: 1,
   characterId: 1,
   createdAt: new Date(),
   updatedAt: new Date(),
@@ -96,7 +97,7 @@ describe("voteController", () => {
   });
 
   it("should create a new vote", async () => {
-    const newVoteData = { characterVote: 1 };
+    const newVoteData = { userId: 1, characterVote: 1 };
     mockReq.body = newVoteData;
     const fakeCreated = createFakeVote({ characterId: 1, id: 2 });
     (voteRepo.createVote as any).mockResolvedValue(fakeCreated);
@@ -113,7 +114,7 @@ describe("voteController", () => {
     await voteController.createVote(mockReq as Request, mockRes as Response, mockNext);
 
     expect(mockRes.status).toHaveBeenCalledWith(400);
-    expect(mockRes.json).toHaveBeenCalledWith({ message: "characterVote (characterId) is required." });
+    expect(mockRes.json).toHaveBeenCalledWith({ message: "userId and characterVote are required." });
   });
 
   it("should delete a vote by id", async () => {
