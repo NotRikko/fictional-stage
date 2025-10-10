@@ -5,14 +5,22 @@ interface CreateVoteInput {
 };
 
 export const createVote = async (data: CreateVoteInput) => {
-    return prisma.vote.create({
+    const newVote = await prisma.vote.create({
         data: {
             characterId: data.characterVote,
         },
         include: {
             character: true,
-        }
+        },
     });
+
+    const totalVotes = await prisma.vote.count({
+        where: {
+            characterId: data.characterVote,
+        },
+    });
+
+    return { ...newVote, totalVotes };
 };
 
 export const getAllVotes = async () => {

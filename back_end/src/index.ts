@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import characterRoutes from "./routes/characterRoutes";
 import songRoutes from "./routes/songRoutes";
 import roundRoutes from "./routes/roundRoutes";
+import voteRoutes from "./routes/voteRoutes";
 import { execSync } from "child_process";
 import { errorHandler } from "./middleware/errorHandler";
 
@@ -30,6 +31,7 @@ app.use(express.json());
 app.use("/characters", characterRoutes);
 app.use("/songs", songRoutes);
 app.use("/rounds", roundRoutes);
+app.use("/votes", voteRoutes);
 
 app.use(errorHandler);
 
