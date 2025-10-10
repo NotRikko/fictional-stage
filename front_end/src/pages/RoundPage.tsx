@@ -38,7 +38,7 @@ export default function RoundPage() {
 
         try {
             const data = await voteApi.createVote({
-                userId: 1, // replace with logged-in user’s ID from context later
+                userId: 1, 
                 characterVote: contestantId,
               });
 
