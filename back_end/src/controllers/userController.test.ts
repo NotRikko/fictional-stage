@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import type { Request, Response } from "express";
 import * as userRepo from "../repositories/userRepo";
 import * as userController from "../controllers/userController";
+import type { CustomRequest } from "../middleware/auth";
 
 vi.mock("../utils/asyncHandler", () => ({
     asyncHandler: (fn: any) => fn,
@@ -70,7 +71,23 @@ describe("userController", () => {
         expect(userRepo.getUserById).toHaveBeenCalledWith(1);
         expect(mockRes.status).toHaveBeenCalledWith(200);
         expect(mockRes.json).toHaveBeenCalledWith(fakeUser);
-      });
+    });
+
+    it("should return 200 and the current user", async () => {
+        const fakeUser = createFakerUser();
+        const mockCustomReq: Partial<CustomRequest> = { userId: 1 };
+        (userRepo.getUserById as any).mockResolvedValue(fakeUser);
+      
+        await userController.getCurrentUser(
+          mockCustomReq as CustomRequest,
+          mockRes as Response,
+          mockNext
+        );
+      
+        expect(userRepo.getUserById).toHaveBeenCalledWith(1);
+        expect(mockRes.status).toHaveBeenCalledWith(200);
+        expect(mockRes.json).toHaveBeenCalledWith(fakeUser);
+    });
     
     it("should return 404 if user not found", async () => {
     mockReq.params = { id: "1" };
