@@ -30,13 +30,13 @@ export const getVoteByCharacter = asyncHandler(async (req: Request, res: Respons
 });
 
 export const createVote = asyncHandler(async (req: Request, res: Response) => {
-  const { characterVote } = req.body;
+  const { userId, characterVote } = req.body;
 
-  if (!characterVote) {
-    return res.status(400).json({ message: "characterVote (characterId) is required." });
+  if (!userId || !characterVote) {
+    return res.status(400).json({ message: "userId and characterVote are required." });
   }
 
-  const newVote = await voteRepo.createVote({ characterVote });
+  const newVote = await voteRepo.createVote({ userId, characterVote });
   res.status(201).json(newVote);
 });
 

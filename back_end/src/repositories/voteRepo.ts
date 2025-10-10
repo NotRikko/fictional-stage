@@ -1,12 +1,14 @@
 import { prisma } from "../db";
 
 interface CreateVoteInput {
+    userId: number;
     characterVote: number;
-};
+  }
 
 export const createVote = async (data: CreateVoteInput) => {
     const newVote = await prisma.vote.create({
         data: {
+            userId: data.userId,
             characterId: data.characterVote,
         },
         include: {
@@ -31,6 +33,11 @@ export const getAllVotes = async () => {
             name: true, 
           },
         },
+        user: {
+            select: {
+                displayName: true,
+            }
+        }
       },
     });
 };
