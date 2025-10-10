@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { asyncHandler } from "../utils/asyncHandler";
 import * as userRepo from "../repositories/userRepo";
+import { CustomRequest } from "../middleware/auth";
 
 export const getAllUsers = asyncHandler(async (_req: Request, res: Response) => {
     const users = await userRepo.getAllUsers();
@@ -16,6 +17,21 @@ export const getUserById = asyncHandler(async (req: Request, res: Response) => {
         return;
     }
     
+    res.status(200).json(user);
+});
+
+export const getCurrentUser = asyncHandler(async (req: Request, res: Response) => {
+    const customReq = req as CustomRequest;
+    const userId = customReq.userId;
+    if (!userId) {
+        return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const user = await userRepo.getUserById(userId);
+    if (!user) {
+        return res.status(404).json({ message: "User not found." });
+    }
+
     res.status(200).json(user);
 });
 
