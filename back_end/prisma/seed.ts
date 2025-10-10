@@ -20,7 +20,6 @@ async function main() {
     },
   });
 
-  // Create characters
   const character1 = await prisma.character.create({
     data: {
       name: "Mizi",
@@ -54,6 +53,14 @@ async function main() {
       characterId: character2.id,
     },
   });
+
+  await prisma.user.create({
+    data: {
+      displayName: "Test",
+      userName: "Test",
+      password: "Test123",
+    }
+  })
 
   console.log("✅ Bootstrap data loaded successfully!");
 }
