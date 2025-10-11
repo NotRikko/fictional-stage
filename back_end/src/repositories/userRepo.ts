@@ -1,4 +1,5 @@
 import { prisma } from "../db";
+import bcrypt from "bcrypt";
 
 interface CreateUserInput {
   displayName: string;
@@ -7,12 +8,13 @@ interface CreateUserInput {
   imageUrl?: string;
 }
 
-export const createUser = async (data: CreateUserInput) => {
+export const createUser = async (data: CreateUserInput) => { 
+    const hashedPassword = await bcrypt.hash(data.password, 10);
     return prisma.user.create({
         data: {
-        displayName: data.displayName,
         userName: data.userName,
-        password: data.password,
+        displayName: data.displayName,
+        password: hashedPassword,
         ...(data.imageUrl ? { imageUrl: data.imageUrl } : {}),
         },
     });

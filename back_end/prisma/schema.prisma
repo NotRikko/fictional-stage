@@ -61,7 +61,7 @@ model Vote {
 model User {
   id Int @id @default(autoincrement())
   displayName String
-  userName String
+  userName String @unique
   password String
   imageUrl String @default("https://i.pinimg.com/736x/18/c2/f7/18c2f7a303ad5b05d8a41c6b7e4c062b.jpg")
   votes Vote[]

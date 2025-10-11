@@ -5,6 +5,7 @@ import characterRoutes from "./routes/characterRoutes";
 import songRoutes from "./routes/songRoutes";
 import roundRoutes from "./routes/roundRoutes";
 import voteRoutes from "./routes/voteRoutes";
+import userRoutes from "./routes/userRoutes";
 import { execSync } from "child_process";
 import { errorHandler } from "./middleware/errorHandler";
 
@@ -28,6 +29,7 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
+app.use("/users", userRoutes);
 app.use("/characters", characterRoutes);
 app.use("/songs", songRoutes);
 app.use("/rounds", roundRoutes);
